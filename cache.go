@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/NikoMalik/compressed_cache/compress"
-	sigil "github.com/NikoMalik/sigil"
+	minder "github.com/NikoMalik/minder"
 )
 
-type Cache[K sigil.Key, V any] interface {
+type Cache[K comparable, V any] interface {
 
 	// Get get cache data by key
 	Get(k K) (V, bool)
@@ -24,46 +24,27 @@ type Cache[K sigil.Key, V any] interface {
 	Close()
 }
 
-type CompressedCache[K sigil.Key, V any] struct {
-	c           *sigil.Cache[K, []byte]
+type CompressedCache[K comparable, V any] struct {
+	c           *minder.Cache[K, []byte]
 	compressor  compress.Compressor
 	serialize   func(any) ([]byte, error)
 	deserialize func([]byte) (any, error)
-	maxCost     int64
-	numCounters int64
 	mu          sync.RWMutex
 }
 
-func NewCompressedCache[K sigil.Key, V any](
+func NewCompressedCache[K comparable, V any](
 	cost int64,
 	comp compress.Compressor,
 	serialize func(any) ([]byte, error),
 	deserialize func([]byte) (any, error),
 ) (Cache[K, V], error) {
-	numCounters := cost * 10 // 10x MaxCost
 
-	cache, err := sigil.NewCache[K, []byte](&sigil.Config[K, []byte]{
-		NumCounters: numCounters,
-		MaxCost:     cost,
-		BufferItems: 64,
-		// OnEvict: func(item *sigil.Item[K, V]) {
-		//       // Reload from DB
-		//       v, err := loadFromDB(item.OriginalKey) load from db
-		//       if err == nil {
-		//           cache.SetWithTTL(item.OriginalKey, v, item.Cost, item.Expiration.Sub(time.Now()))
-		//       }
-		//   },
-	})
-	if err != nil {
-		return nil, err
-	}
+	cache := minder.NewCache[K, []byte]()
 	return &CompressedCache[K, V]{
 		c:           cache,
 		compressor:  comp,
 		serialize:   serialize,
 		deserialize: deserialize,
-		maxCost:     cost,
-		numCounters: numCounters,
 	}, nil
 }
 
@@ -107,9 +88,7 @@ func (ch *CompressedCache[K, V]) Set(k K, v V) bool {
 	if err != nil {
 		return false
 	}
-	cost := int64(len(compressed))
-	ok := ch.c.Set(k, compressed, cost)
-	ch.c.Wait()
+	ok := ch.c.Set(k, compressed)
 
 	return ok
 }
@@ -123,9 +102,7 @@ func (ch *CompressedCache[K, V]) SetWithTTL(k K, v V, ttl time.Duration) bool {
 	if err != nil {
 		return false
 	}
-	cost := int64(len(compressed))
-	ok := ch.c.SetWithTTL(k, compressed, cost, ttl)
-	ch.c.Wait()
+	ok := ch.c.SetWithTTL(k, compressed, ttl)
 
 	return ok
 }

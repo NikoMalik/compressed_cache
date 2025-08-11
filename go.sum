@@ -1,3 +1,5 @@
+github.com/NikoMalik/minder v0.0.0-20250811094701-9424333b3e22 h1:q3+KrAI79SS9e5uCMkZCgTTSiFaROfg+wpFyKudR6KQ=
+github.com/NikoMalik/minder v0.0.0-20250811094701-9424333b3e22/go.mod h1:daURh2Puzyfv+V9hq6bYD8f/uxAIXR0zncqJDDI98tk=
 github.com/NikoMalik/sigil v0.0.0-20250810194240-938ad921aadf h1:59gxcQCnlTuT8Novd5J0Jou8odGSJLT3PbMKPOLJCDY=
 github.com/NikoMalik/sigil v0.0.0-20250810194240-938ad921aadf/go.mod h1:QfskahNfMYN4IBGySPkpYjf9LWDjTyTiPlQcXzmtOY4=
 github.com/NikoMalik/sigil v0.0.0-20250811063511-5492cd6f3ff1 h1:Vr7iBo+z7906nWn+7wx3ZaU8DB9FbKbsUIWZOR9fVTo=
@@ -16,6 +18,8 @@ github.com/klauspost/compress v1.18.0 h1:c/Cqfb0r+Yi+JtIEq73FWXVkRonBlf0CRNYc8Zt
 github.com/klauspost/compress v1.18.0/go.mod h1:2Pp+KzxcywXVXMr50+X0Q/Lsb43OQHYWRCY2AiWywWQ=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+github.com/puzpuzpuz/xsync/v4 v4.1.0 h1:x9eHRl4QhZFIPJ17yl4KKW9xLyVWbb3/Yq4SXpjF71U=
+github.com/puzpuzpuz/xsync/v4 v4.1.0/go.mod h1:VJDmTCJMBt8igNxnkQd86r+8KUeN1quSfNKu5bLYFQo=
 github.com/stretchr/testify v1.10.0 h1:Xv5erBjTwe/5IxqUQTdXv5kgmIvbHo3QQyRwhJsOfJA=
 github.com/stretchr/testify v1.10.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 github.com/zhangyunhao116/sbconv v0.2.1 h1:9Z43QFpnkYNjCrRz8UR9ShVRVQ0OG5VtLKQ3mAL5zjU=
