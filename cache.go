@@ -33,7 +33,6 @@ type CompressedCache[K comparable, V any] struct {
 }
 
 func NewCompressedCache[K comparable, V any](
-	cost int64,
 	comp compress.Compressor,
 	serialize func(any) ([]byte, error),
 	deserialize func([]byte) (any, error),

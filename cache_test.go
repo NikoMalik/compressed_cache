@@ -25,7 +25,7 @@ func init() {
 func TestCompressedCacheBasicOperations(t *testing.T) {
 	// Initialize compressor and cache
 	compressor, _ := compress.NewZstdCompressor()
-	cache, err := NewCompressedCache[string, TestStruct](1000000, compressor, compress.SerializeGob, compress.DeserializeGob)
+	cache, err := NewCompressedCache[string, TestStruct](compressor, compress.SerializeGob, compress.DeserializeGob)
 	if err != nil {
 		t.Fatalf("Failed to create cache: %v", err)
 	}
@@ -58,7 +58,7 @@ func TestCompressedCacheBasicOperations(t *testing.T) {
 
 func TestCompressedCacheTTL(t *testing.T) {
 	compressor, _ := compress.NewZstdCompressor()
-	cache, err := NewCompressedCache[string, TestStruct](1000000, compressor, compress.SerializeGob, compress.DeserializeGob)
+	cache, err := NewCompressedCache[string, TestStruct](compressor, compress.SerializeGob, compress.DeserializeGob)
 	if err != nil {
 		t.Fatalf("Failed to create cache: %v", err)
 	}
@@ -100,7 +100,7 @@ func TestCompressedCacheTTL(t *testing.T) {
 
 func TestCompressedCacheConcurrentOperations(t *testing.T) {
 	compressor, _ := compress.NewZstdCompressor()
-	cache, err := NewCompressedCache[string, TestStruct](1000000, compressor, compress.SerializeGob, compress.DeserializeGob)
+	cache, err := NewCompressedCache[string, TestStruct](compressor, compress.SerializeGob, compress.DeserializeGob)
 	if err != nil {
 		t.Fatalf("Failed to create cache: %v", err)
 	}
@@ -149,7 +149,7 @@ func TestCompressedCacheConcurrentOperations(t *testing.T) {
 
 func TestCompressedCacheLargeObjects(t *testing.T) {
 	compressor, _ := compress.NewZstdCompressor()
-	cache, err := NewCompressedCache[string, TestStruct](1000000, compressor, compress.SerializeGob, compress.DeserializeGob)
+	cache, err := NewCompressedCache[string, TestStruct](compressor, compress.SerializeGob, compress.DeserializeGob)
 	if err != nil {
 		t.Fatalf("Failed to create cache: %v", err)
 	}
@@ -181,7 +181,7 @@ func TestCompressedCacheBasic(t *testing.T) {
 	comp, err := compress.NewZstdCompressor()
 	require.NoError(t, err)
 
-	cache, err := NewCompressedCache[int, string](1000, comp, compress.SerializeGob, compress.DeserializeGob)
+	cache, err := NewCompressedCache[int, string](comp, compress.SerializeGob, compress.DeserializeGob)
 	require.NoError(t, err)
 
 	key := 1
@@ -203,7 +203,7 @@ func TestCompressedCacheTTL2(t *testing.T) {
 	comp, err := compress.NewZstdCompressor()
 	require.NoError(t, err)
 
-	cache, err := NewCompressedCache[int, string](1000, comp, compress.SerializeGob, compress.DeserializeGob)
+	cache, err := NewCompressedCache[int, string](comp, compress.SerializeGob, compress.DeserializeGob)
 	require.NoError(t, err)
 
 	key := 1
@@ -234,7 +234,7 @@ func TestCompressedCacheReallocation(t *testing.T) {
 	comp, err := compress.NewZstdCompressor()
 	require.NoError(t, err)
 
-	cache, err := NewCompressedCache[int, string](1000, comp, compress.SerializeGob, compress.DeserializeGob)
+	cache, err := NewCompressedCache[int, string](comp, compress.SerializeGob, compress.DeserializeGob)
 	require.NoError(t, err)
 
 	// Set initial data with TTL
@@ -274,7 +274,7 @@ func TestCompressedCacheEmptyValue(t *testing.T) {
 	comp, err := compress.NewZstdCompressor()
 	require.NoError(t, err)
 
-	cache, err := NewCompressedCache[int, string](1000, comp, compress.SerializeGob, compress.DeserializeGob)
+	cache, err := NewCompressedCache[int, string](comp, compress.SerializeGob, compress.DeserializeGob)
 	require.NoError(t, err)
 
 	key := 1
@@ -292,7 +292,7 @@ func TestCompressedCacheLargeValue(t *testing.T) {
 	comp, err := compress.NewZstdCompressor()
 	require.NoError(t, err)
 
-	cache, err := NewCompressedCache[int, string](10000, comp, compress.SerializeGob, compress.DeserializeGob)
+	cache, err := NewCompressedCache[int, string](comp, compress.SerializeGob, compress.DeserializeGob)
 	require.NoError(t, err)
 
 	key := 1
@@ -314,7 +314,7 @@ func TestCompressedCacheSerializationError(t *testing.T) {
 		return nil, errors.New("serialization failed")
 	}
 
-	cache, err := NewCompressedCache[int, string](1000, comp, failSerialize, compress.DeserializeGob)
+	cache, err := NewCompressedCache[int, string](comp, failSerialize, compress.DeserializeGob)
 	require.NoError(t, err)
 
 	ok := cache.Set(1, "test")
@@ -327,7 +327,7 @@ func TestCompressedCacheCompressionError(t *testing.T) {
 		compressErr: errors.New("compression failed"),
 	}
 
-	cache, err := NewCompressedCache[int, string](1000, failCompressor, compress.SerializeGob, compress.DeserializeGob)
+	cache, err := NewCompressedCache[int, string](failCompressor, compress.SerializeGob, compress.DeserializeGob)
 	require.NoError(t, err)
 
 	ok := cache.Set(1, "test")
@@ -339,7 +339,7 @@ func TestCompressedCacheConcurrency(t *testing.T) {
 	comp, err := compress.NewZstdCompressor()
 	require.NoError(t, err)
 
-	cache, err := NewCompressedCache[int, string](1<<30, comp, compress.SerializeGob, compress.DeserializeGob)
+	cache, err := NewCompressedCache[int, string](comp, compress.SerializeGob, compress.DeserializeGob)
 	require.NoError(t, err)
 
 	const numGoroutines = 10 // Reduced to stabilize
@@ -390,7 +390,7 @@ func TestCompressedCacheConcurrency(t *testing.T) {
 func BenchmarkCompressedCacheStress(b *testing.B) {
 	comp, _ := compress.NewZstdCompressor()
 
-	cache, _ := NewCompressedCache[int, string](1000, comp, compress.SerializeGob, compress.DeserializeGob)
+	cache, _ := NewCompressedCache[int, string](comp, compress.SerializeGob, compress.DeserializeGob)
 
 	sizes := []int{10, 100, 1000}
 	b.ResetTimer()
@@ -409,7 +409,7 @@ func TestCompressedCacheKeyNotFound(t *testing.T) {
 	comp, err := compress.NewZstdCompressor()
 	require.NoError(t, err)
 
-	cache, err := NewCompressedCache[int, string](1000, comp, compress.SerializeGob, compress.DeserializeGob)
+	cache, err := NewCompressedCache[int, string](comp, compress.SerializeGob, compress.DeserializeGob)
 	require.NoError(t, err)
 
 	_, found := cache.Get(999)
@@ -425,7 +425,7 @@ func TestCompressedCacheDeserializationError(t *testing.T) {
 		return nil, errors.New("deserialization failed")
 	}
 
-	cache, err := NewCompressedCache[int, string](1000, comp, compress.SerializeGob, failDeserialize)
+	cache, err := NewCompressedCache[int, string](comp, compress.SerializeGob, failDeserialize)
 	require.NoError(t, err)
 
 	ok := cache.Set(1, "test")
